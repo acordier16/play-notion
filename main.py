@@ -6,16 +6,16 @@ from random import shuffle
 from functools import partial
 import subprocess
 
-from config import YTDLP_PATH, NOTION_TOKEN, NOTION_DATABASE_ID, NOTION_DATABASE_URL
+from config import YTDLP_PATH, NOTION_API_VERSION, NOTION_TOKEN, NOTION_DATABASE_ID, NOTION_DATABASE_URL
 
 
-def build_headers_and_json(notion_token, tags):
+def build_headers_and_json(notion_token, notion_api_version, tags):
     # Building the headers for all Notion requests
     headers = {
         "Authorization": "Bearer " + notion_token,
         "content-type": "application/json",
         "accept": "application/json",
-        "Notion-Version": "2022-06-28",
+        "Notion-Version": notion_api_version,
     }
     # Building the json data for the Notion POST request
     and_query = []
@@ -43,7 +43,7 @@ def make_request_and_do(url, headers, json, do):
         return do(response)
     else:
         print(f"[ERROR] {response.status_code} - {response.text}")
-        # RAISE ERROR?
+        raise ValueError("Error when requesting Notion.")
 
 
 def get_existing_tags(response):
@@ -138,7 +138,7 @@ def main():
     args = parser.parse_args()
 
     # Build the headers and the json POST data
-    headers, json = build_headers_and_json(notion_token=NOTION_TOKEN, tags=args.tags)
+    headers, json = build_headers_and_json(notion_token=NOTION_TOKEN, notion_api_version=NOTION_API_VERSION, tags=args.tags)
 
     # Connect with the database
     existing_tags = make_request_and_do(
