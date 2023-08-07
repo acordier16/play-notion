@@ -1,13 +1,20 @@
 #!/usr/bin/env python3
+"""
+Written with python3.11. Requires yt-dlp and mpv installed.
+"""
 
 import argparse
-import requests
 from random import shuffle
 from functools import partial
 import subprocess
 
+import requests
+from termcolor import colored
+
 from config import YTDLP_PATH, NOTION_API_VERSION, NOTION_TOKEN, NOTION_DATABASE_ID, NOTION_DATABASE_URL
 
+INFO_TEXT = colored("[INFO]", "green")
+ERROR_TEXT = colored("[ERROR]", "red")
 
 def build_headers_and_json(notion_token, notion_api_version, tags):
     # Building the headers for all Notion requests
@@ -42,17 +49,17 @@ def make_request_and_do(url, headers, json, do):
     if response.status_code == 200:
         return do(response)
     else:
-        print(f"[ERROR] {response.status_code} - {response.text}")
+        print(ERROR_TEXT, f"{response.status_code} - {response.text}")
         raise ValueError("Error when requesting Notion.")
 
 
 def get_existing_tags(response):
-    print("[INFO] Connected to the Notion database successfuly.")
+    print(INFO_TEXT, "Connected to the Notion database successfuly.")
     existing_tags = [
         item["name"]
         for item in response.json()["properties"]["Tags"]["multi_select"]["options"]
     ]
-    print(f"[INFO] Available tags: {existing_tags}")
+    print(INFO_TEXT, f"Available tags: {existing_tags}")
     return existing_tags
 
 
@@ -70,12 +77,12 @@ def get_tracks_urls(response, random, tracks_number):
     urls = [url for url in urls if works_with_youtube_dl(url)]
     # The & character is a problem when passing the command to subprocess, so we need to escape it for each URL
     urls = [url.replace("&", "\\&") for url in urls if works_with_youtube_dl(url)]
-    print(f"[INFO] Gathered last {len(urls)} URLs.")
+    print(INFO_TEXT, f"Gathered last {len(urls)} URLs.")
     if random:
         shuffle(urls)
-        print(f"[INFO] Randomized URLs order.")
+        print(INFO_TEXT, "Randomized URLs order.")
     urls = urls[:tracks_number]
-    print(f"[INFO] Selected the first {len(urls)} URLs.")
+    print(INFO_TEXT, f"Selected the first {len(urls)} URLs.")
     return urls
 
 
