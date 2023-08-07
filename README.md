@@ -1,7 +1,7 @@
 # play-notion
-Play music from a tagged Notion database via yt-dlp and mpv! 🎵
+Play music from a tagged [Notion](https://notion.so/) database via yt-dlp and mpv! 🎵
 
-Are you using Notion as a database for the music links (youtube, soundcloud, ...) you listen to? 🧠
+Are you using Notion as a database for the music links (Youtube, Soundcloud, ...) you listen to? 🧠
 
 Have you ever wanted to be able to query these links with tags and play corresponding tracks directly? 🔗
 
@@ -41,4 +41,4 @@ This python program requires:
 7. Profit! Usage: `play-notion [OPTIONS] ARGS` (do not hesitate to `-h` for more details)
 
 ## Supported links
-So far, they are the same as the ones yt-dlp supports. Note that there is a filtering of links hard-coded within the script, so that yt-dlp doesn't break. Hence only **bandcamp**, **soundcloud**, and **youtube** links are supported (but you can add more if you want!).
+So far, they are the same as the ones yt-dlp supports. Note that there is a filtering of links hard-coded within the script, so that yt-dlp doesn't break. Hence only **Bandcamp**, **Soundcloud**, and **Youtube** links are supported (but you can add more if you want!).
