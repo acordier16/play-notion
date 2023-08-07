@@ -53,13 +53,14 @@ def make_request_and_do(url, headers, json, do):
         raise ValueError("Error when requesting Notion.")
 
 
-def get_existing_tags(response):
+def get_existing_tags(response, print_available_tags):
     print(INFO_TEXT, "Connected to the Notion database successfuly.")
     existing_tags = [
         item["name"]
         for item in response.json()["properties"]["Tags"]["multi_select"]["options"]
     ]
-    print(INFO_TEXT, f"Available tags: {existing_tags}")
+    if print_available_tags:
+        print(INFO_TEXT, f"Available tags: {existing_tags}")
     return existing_tags
 
 
@@ -137,6 +138,12 @@ def main():
         help="If present, tracks will be retrieved in a 'random' order rather than in a 'most recent first' one.",
     )
     parser.add_argument(
+        "-v",
+        "--verbose",
+        action="store_true",
+        help="If present, will display available tags when requesting Notion.",
+    )
+    parser.add_argument(
         "-w",
         "--window",
         action="store_true",
@@ -149,7 +156,7 @@ def main():
 
     # Connect with the database
     existing_tags = make_request_and_do(
-        url=NOTION_DATABASE_URL, headers=headers, json=None, do=get_existing_tags
+        url=NOTION_DATABASE_URL, headers=headers, json=None, do=partial(get_existing_tags, print_available_tags=args.verbose)
     )
 
     # Query the database to get tracks URLs
