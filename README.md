@@ -1,6 +1,8 @@
 # play-notion
 Play music from a tagged Notion database via yt-dlp and mpv! 🎵
 
+![Live Demo](https://raw.githubusercontent.com/acordier16/play-notion/main/demo.gif)
+
 Are you...
 - ...using Notion as a database for the music links (youtube, soundcloud, ...) you listen to? 🧠
 
